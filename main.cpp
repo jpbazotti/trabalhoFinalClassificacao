@@ -1,11 +1,12 @@
 #include <iostream>
 #include <string>
+#include <cctype>
 #include "parser.hpp"
 
 using namespace aria::csv;
 using namespace std;
 
-const int ALPHABET_SIZE = 26;
+const int ALPHABET_SIZE = 28;
 
 struct TrieNode
 {
@@ -67,7 +68,14 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
 
     for (int i = 0; i < key.length(); i++)
     {
+        key[i] = tolower(key[i]);
         int index = key[i] - 'a';
+        if(key[i] == ' '){
+            index = 26;
+        }
+        if(key[i] == '-'){
+            index = 27;
+        }
         if (!pCrawl->children[index])
             pCrawl->children[index] = getNode();
 
@@ -86,7 +94,14 @@ int search(struct TrieNode *root, string key)
 
     for (int i = 0; i < key.length(); i++)
     {
+        key[i] = tolower(key[i]);
         int index = key[i] - 'a';
+        if(key[i] == ' '){
+            index = 26;
+        }
+        if(key[i] == '-'){
+            index = 27;
+        }
         if (!pCrawl->children[index])
             return 0;
 
@@ -126,7 +141,7 @@ int main() {
   for(Player player:players){
     insert(root, player.name, player.sofifa_id);
   }
-  //int achou = search(root, "Thiago Emiliano da Silva");
+  int achou = search(root, "Thiago Emiliano da Silva");
 
-  cout << "a" << "\n";
+  cout << achou << "\n";
 }
