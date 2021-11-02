@@ -1,9 +1,4 @@
-#include <iostream>
-#include <string>
-#include "parser.hpp"
-
-using namespace aria::csv;
-using namespace std;
+#include "dataStructure.h"
 
 const int ALPHABET_SIZE = 26;
 
@@ -15,40 +10,10 @@ struct TrieNode
     int sofifa_id;
 };
 
-typedef struct tipoNo Nodo_Rating;
-struct tipoNo{
-    int sofifa_id;
-    int media;
-    int total;
-};
-
-typedef struct rating UserRating;
-struct rating{
-  int user_id;
-  int sofifa_id;
-  float rating;
-};
-
-typedef struct player Player;
-struct player{
-  int sofifa_id;
-  string name;
-  string position;
-};
-
-unsigned long djb2Hash(string str)
-{
-    unsigned long hash = 5381;
-    for (auto c : str)
-        hash = ((hash << 5) + hash + c);
-
-    return hash;
-}
-
 // Returns new trie node (initialized to NULLs)
 struct TrieNode *getNode(void)
 {
-    struct TrieNode *pNode =  new TrieNode;
+    struct TrieNode *pNode = new TrieNode;
 
     pNode->sofifa_id = 0;
 
@@ -80,7 +45,7 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
 
 // Returns true if key presents in trie, else
 // false
-int search(struct TrieNode *root, string key)
+bool search(struct TrieNode *root, string key)
 {
     struct TrieNode *pCrawl = root;
 
@@ -88,45 +53,22 @@ int search(struct TrieNode *root, string key)
     {
         int index = key[i] - 'a';
         if (!pCrawl->children[index])
-            return 0;
+            return false;
 
         pCrawl = pCrawl->children[index];
     }
 
-    if(pCrawl != NULL && (pCrawl->sofifa_id != 0)){
-        return pCrawl->sofifa_id;
-    }
-    else{
-        return 0;
-    }
+    return (pCrawl != NULL && (pCrawl->sofifa_id != 0));
 }
 
-void le_entrada(){
-
-
+void le_entrada()
+{
 }
 
-int main() {
-    struct TrieNode *root = getNode();
-
-    ifstream f2("players_clean2.csv");
-  CsvParser parser2(f2);
-  vector<Player> players;
-  for (auto& row : parser2) {
-    try{
-    Player player;
-    player.sofifa_id=stoi(row.at(0));
-    player.name=row.at(1);
-    player.position=row.at(2);
-    players.push_back(player);
-      }catch(const invalid_argument e){
-          cout << "pula primeira linha\n";
-      }
-  }
-  for(Player player:players){
-    insert(root, player.name, player.sofifa_id);
-  }
-  //int achou = search(root, "Thiago Emiliano da Silva");
-
-  cout << "a" << "\n";
+int main()
+{
+    vector<list<player>> tablePlayer(5000);
+    vector<list<UserRating>> tableReviews(30000);
+    loadDataStructures(tablePlayer,tableReviews,"players_clean2.csv","minirating.csv");
+    printPlayerTable(tablePlayer);
 }
