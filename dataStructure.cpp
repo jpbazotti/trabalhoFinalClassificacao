@@ -52,7 +52,7 @@ void loadDataStructures(vector<list<player>> &tablePlayer,vector<list<UserRating
             int hash = player.sofifa_id % tablePlayer.size();
             tablePlayer.at(hash).push_back(player);
         }
-        catch (const invalid_argument e)
+        catch (invalid_argument const&)
         {
             cout << "pula primeira linha 1";
         }
@@ -69,7 +69,7 @@ void loadDataStructures(vector<list<player>> &tablePlayer,vector<list<UserRating
             tableReviews.at(hash).push_back(rating);
             playerReviewCount(tablePlayer, rating.sofifa_id, rating.rating);
         }
-        catch (const invalid_argument e)
+        catch (invalid_argument const&)
         {
             cout << "pula primeira linha 2";
         }

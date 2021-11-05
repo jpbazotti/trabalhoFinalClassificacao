@@ -41,10 +41,12 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
     {
         key[i] = tolower(key[i]);
         int index = key[i] - 'a';
-        if(key[i] == ' '){
+        if (key[i] == ' ')
+        {
             index = 26;
         }
-        if(key[i] == '-'){
+        if (key[i] == '-')
+        {
             index = 27;
         }
         if (!pCrawl->children[index])
@@ -67,10 +69,12 @@ bool search(struct TrieNode *root, string key)
     {
         key[i] = tolower(key[i]);
         int index = key[i] - 'a';
-        if(key[i] == ' '){
+        if (key[i] == ' ')
+        {
             index = 26;
         }
-        if(key[i] == '-'){
+        if (key[i] == '-')
+        {
             index = 27;
         }
         if (!pCrawl->children[index])
@@ -86,27 +90,38 @@ void le_entrada()
 {
 }
 
-int main() {
+int main()
+{
+    vector<list<player>> tablePlayer(5000);
+    vector<list<UserRating>> tableReviews(30000);
+    loadDataStructures(tablePlayer, tableReviews, "players_clean2.csv", "minirating.csv");
+    printPlayerTable(tablePlayer);
+
     struct TrieNode *root = getNode();
 
     ifstream f2("players_clean2.csv");
-  CsvParser parser2(f2);
-  vector<Player> players;
-  for (auto& row : parser2) {
-    try{
-    Player player;
-    player.sofifa_id=stoi(row.at(0));
-    player.name=row.at(1);
-    player.position=row.at(2);
-    players.push_back(player);
-      }catch(const invalid_argument e){
-          cout << "pula primeira linha\n";
-      }
-  }
-  for(Player player:players){
-    insert(root, player.name, player.sofifa_id);
-  }
-  int achou = search(root, "Thiago Emiliano da Silva");
+    CsvParser parser2(f2);
+    vector<Player> players;
+    for (auto &row : parser2)
+    {
+        try
+        {
+            Player player;
+            player.sofifa_id = stoi(row.at(0));
+            player.name = row.at(1);
+            player.position = row.at(2);
+            players.push_back(player);
+        }
+        catch (const invalid_argument e)
+        {
+            cout << "pula primeira linha\n";
+        }
+    }
+    for (Player player : players)
+    {
+        insert(root, player.name, player.sofifa_id);
+    }
+    int achou = search(root, "Thiago Emiliano da Silva");
 
-  cout << achou << "\n";
+    cout << achou << "\n";
 }
