@@ -7,9 +7,39 @@ using namespace aria::csv;
 using namespace std;
 #include "dataStructure.h"
 
+void print_nodes(struct TrieNode *node, string substring, vector<int> &list_id){
+    int i;
+    char c;
+
+    if(node->sofifa_id !=0){
+        list_id.push_back(node->sofifa_id);
+        cout << substring << " " << node->sofifa_id <<"\n";
+        return;
+    }
+    for(i=0; i<=ALPHABET_SIZE; i++){
+        if(node->children[i] != NULL){
+            c = i + 'a';
+            if (i == 26){
+                c = ' ';
+            }
+            if (i == 27){
+                c = '-';
+            }
+            if(i == 28){
+                c = '.';
+            }
+            //cout << substring << "\n";
+            //getchar();
+            print_nodes(node->children[i], substring+=c, list_id);
+            substring.resize(substring.size() - 1);
+        }
+    }
+    return;
+}
+
 // Returns true if key presents in trie, else
 // false
-int search(struct TrieNode *root, string key)
+int search(struct TrieNode *root, string key, vector<int> &list_id)
 {
     struct TrieNode *pCrawl = root;
 
@@ -29,18 +59,17 @@ int search(struct TrieNode *root, string key)
             index = 28;
         }
         if (!pCrawl->children[index])
-            return false;
+            return 0;
 
         pCrawl = pCrawl->children[index];
     }
 
-    if(pCrawl != NULL && (pCrawl->sofifa_id != 0)){
-        return pCrawl->sofifa_id;
-    }
-    else{
-        return 0;
-    }
+    print_nodes(pCrawl, key, list_id);
+
+    return 0;
 }
+
+
 
 void le_entrada()
 {
@@ -50,8 +79,9 @@ int main()
 {
     vector<list<player>> tablePlayer(5000);
     vector<list<UserRating>> tableReviews(30000);
+    vector<int> list_id;
     loadDataStructures(tablePlayer, tableReviews, "players_clean2.csv", "minirating.csv");
-    printPlayerTable(tablePlayer);
+    //printPlayerTable(tablePlayer);
 
     struct TrieNode *root = getNode();
 
@@ -73,7 +103,10 @@ int main()
   for(Player player:players){
         insert(root, player.name, player.sofifa_id);
   }
-  int achou = search(root, "Thiago Emiliano da Silva");
+  search(root, "Fer", list_id);
 
-  cout << achou << "\n";
+    for(int i=0;i<list_id.size();i++){
+        cout << list_id.at(i) << "\n";
+    }
+  //cout << achou << "\n";
 }
