@@ -9,7 +9,7 @@ using namespace std;
 
 // Returns true if key presents in trie, else
 // false
-bool search(struct TrieNode *root, string key)
+int search(struct TrieNode *root, string key)
 {
     struct TrieNode *pCrawl = root;
 
@@ -23,13 +23,21 @@ bool search(struct TrieNode *root, string key)
         if(key[i] == '-'){
             index = 27;
         }
+        if(key[i] == '.'){
+            index = 28;
+        }
         if (!pCrawl->children[index])
             return false;
 
         pCrawl = pCrawl->children[index];
     }
 
-    return (pCrawl != NULL && (pCrawl->sofifa_id != 0));
+    if(pCrawl != NULL && (pCrawl->sofifa_id != 0)){
+        return pCrawl->sofifa_id;
+    }
+    else{
+        return 0;
+    }
 }
 
 void le_entrada()
@@ -55,7 +63,7 @@ int main() {
         }
   }
   for(Player player:players){
-    insert(root, player.name, player.sofifa_id);
+        insert(root, player.name, player.sofifa_id);
   }
   int achou = search(root, "Thiago Emiliano da Silva");
 

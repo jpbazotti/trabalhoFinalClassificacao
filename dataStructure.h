@@ -8,7 +8,7 @@
 using namespace aria::csv;
 using namespace std;
 
-const int ALPHABET_SIZE = 28;
+const int ALPHABET_SIZE = 29;
 
 typedef struct rating UserRating;
 struct rating{
