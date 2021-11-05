@@ -17,10 +17,12 @@ int search(struct TrieNode *root, string key)
     {
         key[i] = tolower(key[i]);
         int index = key[i] - 'a';
-        if(key[i] == ' '){
+        if (key[i] == ' ')
+        {
             index = 26;
         }
-        if(key[i] == '-'){
+        if (key[i] == '-')
+        {
             index = 27;
         }
         if(key[i] == '.'){
@@ -44,7 +46,13 @@ void le_entrada()
 {
 }
 
-int main() {
+int main()
+{
+    vector<list<player>> tablePlayer(5000);
+    vector<list<UserRating>> tableReviews(30000);
+    loadDataStructures(tablePlayer, tableReviews, "players_clean2.csv", "minirating.csv");
+    printPlayerTable(tablePlayer);
+
     struct TrieNode *root = getNode();
 
     ifstream f2("players_clean2.csv");
