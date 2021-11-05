@@ -89,6 +89,79 @@ struct TrieNode *getNode(void)
     return pNode;
 }
 
+void print_nodes(struct TrieNode *node, string substring, vector<int> &list_id)
+{
+    int i;
+    char c;
+    //cout << substring << "\n";
+
+    if (substring.at(substring.length() - 1) == '~')
+    {
+        cout << "erro";
+        return;
+    }
+    if (node->sofifa_id != 0)
+    {
+        list_id.push_back(node->sofifa_id);
+        cout << substring << " " << node->sofifa_id << "\n";
+        return;
+    }
+    for (i = 0; i <= ALPHABET_SIZE; i++)
+    {
+        if (node->children[i] != NULL)
+        {
+            c = i + 'a';
+            if (i == 26)
+            {
+                c = ' ';
+            }
+            if (i == 27)
+            {
+                c = '-';
+            }
+            if (i == 28)
+            {
+                c = '.';
+            }
+            //cout << substring << "\n";
+            //getchar();
+            print_nodes(node->children[i], substring += c, list_id);
+            substring.resize(substring.size() - 1);
+        }
+    }
+    return;
+}
+
+int search(struct TrieNode *root, string key, vector<int> &list_id)
+{
+    struct TrieNode *pCrawl = root;
+
+    for (int i = 0; i < (int)key.length(); i++)
+    {
+        key[i] = tolower(key[i]);
+        int index = key[i] - 'a';
+        if (key[i] == ' ')
+        {
+            index = 26;
+        }
+        if (key[i] == '-')
+        {
+            index = 27;
+        }
+        if (key[i] == '.')
+        {
+            index = 28;
+        }
+        if (!pCrawl->children[index])
+            return 0;
+
+        pCrawl = pCrawl->children[index];
+    }
+
+    print_nodes(pCrawl, key, list_id);
+
+    return 0;
+}
 // If not present, inserts key into trie
 // If the key is prefix of trie node, just
 // marks leaf node
@@ -108,7 +181,8 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
         {
             index = 27;
         }
-        if(key[i] == '.'){
+        if (key[i] == '.')
+        {
             index = 28;
         }
         if (!pCrawl->children[index])
@@ -144,10 +218,10 @@ void userSearch(vector<list<UserRating>> &tableReviews, vector<list<player>> &ta
         {
             if ((*it2).sofifa_id == userRatings.at(i).sofifa_id)
             {
-                p=(*it2);
+                p = (*it2);
             }
             advance(it2, 1);
         }
-        cout << userRatings.at(i).user_id << ":" << userRatings.at(i).sofifa_id << ":" << p.name << ":" << p.reviewTotal/p.reviewCout << ":" << p.reviewCout << ":" << userRatings.at(i).rating <<"\n";
+        cout << userRatings.at(i).user_id << ":" << userRatings.at(i).sofifa_id << ":" << p.name << ":" << p.reviewTotal / p.reviewCout << ":" << p.reviewCout << ":" << userRatings.at(i).rating << "\n";
     }
 }
