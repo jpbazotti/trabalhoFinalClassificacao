@@ -108,6 +108,9 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
         {
             index = 27;
         }
+        if(key[i] == '.'){
+            index = 28;
+        }
         if (!pCrawl->children[index])
             pCrawl->children[index] = getNode();
 

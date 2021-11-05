@@ -7,9 +7,39 @@ using namespace aria::csv;
 using namespace std;
 #include "dataStructure.h"
 
+void print_nodes(struct TrieNode *node, string substring, vector<int> &list_id){
+    int i;
+    char c;
+
+    if(node->sofifa_id !=0){
+        list_id.push_back(node->sofifa_id);
+        cout << substring << " " << node->sofifa_id <<"\n";
+        return;
+    }
+    for(i=0; i<=ALPHABET_SIZE; i++){
+        if(node->children[i] != NULL){
+            c = i + 'a';
+            if (i == 26){
+                c = ' ';
+            }
+            if (i == 27){
+                c = '-';
+            }
+            if(i == 28){
+                c = '.';
+            }
+            //cout << substring << "\n";
+            //getchar();
+            print_nodes(node->children[i], substring+=c, list_id);
+            substring.resize(substring.size() - 1);
+        }
+    }
+    return;
+}
+
 // Returns true if key presents in trie, else
 // false
-bool search(struct TrieNode *root, string key)
+int search(struct TrieNode *root, string key, vector<int> &list_id)
 {
     struct TrieNode *pCrawl = root;
 
@@ -25,19 +55,25 @@ bool search(struct TrieNode *root, string key)
         {
             index = 27;
         }
+        if(key[i] == '.'){
+            index = 28;
+        }
         if (!pCrawl->children[index])
-            return false;
+            return 0;
 
         pCrawl = pCrawl->children[index];
     }
 
-    return (pCrawl != NULL && (pCrawl->sofifa_id != 0));
+    print_nodes(pCrawl, key, list_id);
+
+    return 0;
 }
 
 int main()
 {
     vector<list<player>> tablePlayer(5000);
     vector<list<UserRating>> tableReviews(30000);
+    vector<int> list_id;
     loadDataStructures(tablePlayer, tableReviews, "players_clean2.csv", "minirating.csv");
     //printPlayerTable(tablePlayer);
 
@@ -66,4 +102,13 @@ int main()
 
   userSearch(tableReviews,tablePlayer,1445);
   cout << "end";
+  for(Player player:players){
+        insert(root, player.name, player.sofifa_id);
+  }
+  search(root, "Fer", list_id);
+
+    for(int i=0;i<list_id.size();i++){
+        cout << list_id.at(i) << "\n";
+    }
+  //cout << achou << "\n";
 }
