@@ -32,7 +32,7 @@ void printPlayerTable(vector<list<Player>> &table)
     }
 }
 
-void loadDataStructures(vector<list<player>> &tablePlayer,vector<list<UserRating>> &tableReviews,string filenamePlayer,string filenameRatings)
+void loadDataStructures(vector<list<player>> &tablePlayer, vector<list<UserRating>> &tableReviews, string filenamePlayer, string filenameRatings)
 {
     ifstream f(filenamePlayer);
     CsvParser parser(f);
@@ -52,9 +52,9 @@ void loadDataStructures(vector<list<player>> &tablePlayer,vector<list<UserRating
             int hash = player.sofifa_id % tablePlayer.size();
             tablePlayer.at(hash).push_back(player);
         }
-        catch (invalid_argument const&)
+        catch (invalid_argument const &)
         {
-            cout << "pula primeira linha 1";
+            //cout << "pula primeira linha 1";
         }
     }
     for (auto &row2 : parser2)
@@ -69,9 +69,9 @@ void loadDataStructures(vector<list<player>> &tablePlayer,vector<list<UserRating
             tableReviews.at(hash).push_back(rating);
             playerReviewCount(tablePlayer, rating.sofifa_id, rating.rating);
         }
-        catch (invalid_argument const&)
+        catch (invalid_argument const &)
         {
-            cout << "pula primeira linha 2";
+            //cout << "pula primeira linha 2";
         }
     }
 }
@@ -96,14 +96,16 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
 {
     struct TrieNode *pCrawl = root;
 
-    for (int i = 0; i < key.length(); i++)
+    for (unsigned long long i = 0; i < key.length(); i++)
     {
         key[i] = tolower(key[i]);
         int index = key[i] - 'a';
-        if(key[i] == ' '){
+        if (key[i] == ' ')
+        {
             index = 26;
         }
-        if(key[i] == '-'){
+        if (key[i] == '-')
+        {
             index = 27;
         }
         if (!pCrawl->children[index])
@@ -114,4 +116,35 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
 
     // mark last node as leaf
     pCrawl->sofifa_id = sofifa_id;
+}
+
+void userSearch(vector<list<UserRating>> &tableReviews, vector<list<player>> &tablePlayer, int userID)
+{
+    vector<UserRating> userRatings;
+    int index = userID % tableReviews.size();
+    tableReviews.at(index);
+    list<UserRating>::iterator it = tableReviews.at(index).begin();
+    while (it != tableReviews.at(index).end())
+    {
+        if ((*it).user_id == userID)
+        {
+            userRatings.push_back((*it));
+        }
+        advance(it, 1);
+    }
+    for (int i = 0; i < (int)userRatings.size(); i++)
+    {
+        player p;
+        int indexPlayer = userRatings.at(i).sofifa_id % tablePlayer.size();
+        list<player>::iterator it2 = tablePlayer.at(indexPlayer).begin();
+        while (it2 != tablePlayer.at(indexPlayer).end())
+        {
+            if ((*it2).sofifa_id == userRatings.at(i).sofifa_id)
+            {
+                p=(*it2);
+            }
+            advance(it2, 1);
+        }
+        cout << userRatings.at(i).user_id << ":" << userRatings.at(i).sofifa_id << ":" << p.name << ":" << p.reviewTotal/p.reviewCout << ":" << p.reviewCout << ":" << userRatings.at(i).rating <<"\n";
+    }
 }

@@ -13,7 +13,7 @@ bool search(struct TrieNode *root, string key)
 {
     struct TrieNode *pCrawl = root;
 
-    for (int i = 0; i < key.length(); i++)
+    for (unsigned long long int i = 0; i < key.length(); i++)
     {
         key[i] = tolower(key[i]);
         int index = key[i] - 'a';
@@ -34,16 +34,12 @@ bool search(struct TrieNode *root, string key)
     return (pCrawl != NULL && (pCrawl->sofifa_id != 0));
 }
 
-void le_entrada()
-{
-}
-
 int main()
 {
     vector<list<player>> tablePlayer(5000);
     vector<list<UserRating>> tableReviews(30000);
     loadDataStructures(tablePlayer, tableReviews, "players_clean2.csv", "minirating.csv");
-    printPlayerTable(tablePlayer);
+    //printPlayerTable(tablePlayer);
 
     struct TrieNode *root = getNode();
 
@@ -58,14 +54,16 @@ int main()
             player.position=row.at(2);
             players.push_back(player);
         }
-        catch(const invalid_argument e){
-            cout << "pula primeira linha\n";
+        catch(invalid_argument const&){
+            //cout << "pula primeira linha\n";
         }
   }
-  for(Player player:players){
-    insert(root, player.name, player.sofifa_id);
-  }
-  int achou = search(root, "Thiago Emiliano da Silva");
+  //for(Player player:players){
+    //insert(root, player.name, player.sofifa_id);
+  //}
+  //int achou = search(root, "Thiago Emiliano da Silva");
+  //cout << achou << "\n";
 
-  cout << achou << "\n";
+  userSearch(tableReviews,tablePlayer,1445);
+  cout << "end";
 }
