@@ -1,8 +1,7 @@
 #include <cctype>
-#include "parser.hpp"
-
-using namespace aria::csv;
 #include "dataStructure.h"
+#include "search.h"
+
 
 int main()
 {
@@ -32,17 +31,13 @@ int main()
             //cout << "pula primeira linha\n";
         }
     }
-    //for(Player player:players){
-    //insert(root, player.name, player.sofifa_id);
-    //}
-    //int achou = search(root, "Thiago Emiliano da Silva");
-    //cout << achou << "\n";
+ 
 
     for (Player player : players)
     {
         insert(root, player.name, player.sofifa_id);
     }
-    search(root, "fer", list_id);
+    search(root, "joao pedro", list_id);
 
     for (int i = 0; i < (int)list_id.size(); i++)
     {
@@ -50,5 +45,4 @@ int main()
     }
     cout << "end";
     return 0;
-    //cout << achou << "\n";
 }

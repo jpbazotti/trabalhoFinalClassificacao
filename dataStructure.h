@@ -37,11 +37,9 @@ struct TrieNode
 bool playerReviewCount(vector<list<player>> &table,int player_id,float review);
 void printPlayerTable(vector<list<Player>> &table);
 void loadDataStructures(vector<list<player>> &tablePlayer,vector<list<UserRating>> &tableReviews,string filenamePlayer,string filenameRatings);
-void userSearch(vector<list<UserRating>> &tableReviews,vector<list<player>> &tablePlayer,int userID);
 struct TrieNode *getNode(void);
 void print_nodes(struct TrieNode *node, string substring, vector<int> &list_id);
 int search(struct TrieNode *root, string key, vector<int> &list_id);
 void insert(struct TrieNode *root, string key, int sofifa_id);
-bool prefixSearch(struct TrieNode *root, string key, string start);
 
 #endif
