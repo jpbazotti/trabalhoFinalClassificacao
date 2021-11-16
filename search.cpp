@@ -126,7 +126,7 @@ void PrefixSearch(vector<list<Player>> tablePlayer, string prefix, struct TrieNo
 {
     vector<int> list_id(0, 100000);
     vector<int> fieldSizes={9,40,18,10,10};
-    vector<string> fields={"sofifa_id","short_name","player_positions","rating","count"};
+    vector<string> fields={"sofifa_id","name","player_positions","rating","count"};
     searchTrie(root, prefix, list_id);
     printHeader(fields,fieldSizes);
     for (int i = 0; i < (int)list_id.size(); i++)
@@ -161,7 +161,7 @@ void userSearch(vector<list<UserRating>> &tableReviews, vector<list<Player>> &ta
     }
     bSortUserRVector(userRatings);
     vector<int> fieldSizes={9,40,10,10,10};
-    vector<string> fields={"sofifa_id","short_name","rating","count","rating"};
+    vector<string> fields={"sofifa_id","name","rating","count","rating"};
     printHeader(fields,fieldSizes);
     for (int i = 0; i < (int)userRatings.size(); i++)
     {
