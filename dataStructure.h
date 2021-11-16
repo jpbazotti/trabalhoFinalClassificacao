@@ -34,12 +34,11 @@ struct TrieNode
     int sofifa_id;
 };
 
-bool playerReviewCount(vector<list<player>> &table,int player_id,float review);
-void printPlayerTable(vector<list<Player>> &table);
-void loadDataStructures(vector<list<player>> &tablePlayer,vector<list<UserRating>> &tableReviews,string filenamePlayer,string filenameRatings);
+bool playerReviewCount(vector<list<Player>> &table,int player_id,float review);
+void printAllPlayers(vector<list<Player>> &table);
+void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<Player> &players,struct TrieNode *root, string filenamePlayer, string filenameRatings);
 struct TrieNode *getNode(void);
-void print_nodes(struct TrieNode *node, string substring, vector<int> &list_id);
-int search(struct TrieNode *root, string key, vector<int> &list_id);
 void insert(struct TrieNode *root, string key, int sofifa_id);
+void bSortUserRVector(vector<UserRating> &ratings);
 
 #endif

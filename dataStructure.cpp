@@ -17,7 +17,7 @@ bool playerReviewCount(vector<list<player>> &table, int player_id, float review)
     return false;
 }
 
-void printPlayerTable(vector<list<Player>> &table)
+void printAllPlayers(vector<list<Player>> &table)
 {
     for (int i = 0; i < (int)table.size(); i++)
     {
@@ -32,7 +32,7 @@ void printPlayerTable(vector<list<Player>> &table)
     }
 }
 
-void loadDataStructures(vector<list<player>> &tablePlayer, vector<list<UserRating>> &tableReviews, string filenamePlayer, string filenameRatings)
+void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<Player> &players, struct TrieNode *root,string filenamePlayer, string filenameRatings)
 {
     ifstream f(filenamePlayer);
     CsvParser parser(f);
@@ -74,6 +74,19 @@ void loadDataStructures(vector<list<player>> &tablePlayer, vector<list<UserRatin
             //cout << "pula primeira linha 2";
         }
     }
+    for (int i = 0; i < (int)tablePlayer.size(); i++)
+    {
+        list<Player>::iterator it = tablePlayer.at(i).begin();
+        while (it != tablePlayer.at(i).end())
+        {
+            players.push_back(*it);
+            advance(it, 1);
+        }
+    }
+    for (Player player : players)
+    {
+        insert(root, player.name, player.sofifa_id);
+    }
 }
 
 // Returns new trie node (initialized to NULLs)
@@ -89,78 +102,7 @@ struct TrieNode *getNode(void)
     return pNode;
 }
 
-void print_nodes(struct TrieNode *node, string substring, vector<int> &list_id)
-{
-    int i;
-    char c;
 
-    if (substring.at(substring.length() - 1) == '~')
-    {
-        cout << "erro\n";
-        return;
-    }
-    if (node->sofifa_id != 0)
-    {
-        list_id.push_back(node->sofifa_id);
-        cout << substring << " " << node->sofifa_id << "\n";
-        return;
-    }
-    for (i = 0; i < ALPHABET_SIZE; i++)
-    {
-        if (node->children[i] != NULL)
-        {
-            c = i + 'a';
-            if (i == 26)
-            {
-                c = ' ';
-            }
-            if (i == 27)
-            {
-                c = '-';
-            }
-            if (i == 28)
-            {
-                c = '.';
-            }
-            //cout << substring << "\n";
-            //getchar();
-            print_nodes(node->children[i], substring += c, list_id);
-            substring.resize(substring.size() - 1);
-        }
-    }
-    return;
-}
-
-int search(struct TrieNode *root, string key, vector<int> &list_id)
-{
-    struct TrieNode *pCrawl = root;
-
-    for (int i = 0; i < (int)key.length(); i++)
-    {
-        key[i] = tolower(key[i]);
-        int index = key[i] - 'a';
-        if (key[i] == ' ')
-        {
-            index = 26;
-        }
-        if (key[i] == '-')
-        {
-            index = 27;
-        }
-        if (key[i] == '.')
-        {
-            index = 28;
-        }
-        if (!pCrawl->children[index])
-            return 0;
-
-        pCrawl = pCrawl->children[index];
-    }
-
-    print_nodes(pCrawl, key, list_id);
-
-    return 0;
-}
 // If not present, inserts key into trie
 // If the key is prefix of trie node, just
 // marks leaf node
@@ -194,4 +136,16 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
     pCrawl->sofifa_id = sofifa_id;
 }
 
+void bSortUserRVector(vector<UserRating> &ratings){
 
+    int size = (int)ratings.size();
+    for(int i =0;i<size;i++){
+        for(int j=0;j<(size -i -1);j++){
+            if(ratings.at(j).rating < ratings.at(j+1).rating){
+                UserRating temp = ratings.at(j);
+                ratings.at(j)=ratings.at(j+1);
+                ratings.at(j+1)=temp;
+            }
+        }
+    }
+}
