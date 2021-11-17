@@ -9,9 +9,10 @@ int main()
     vector<list<UserRating>> tableReviews(30000);
     vector<Player> players;
     struct TrieNode *root = getNode();
-    loadDataStructures(tablePlayer, tableReviews,players,root ,"players_clean2.csv", "rating.csv","tags.csv");
+    loadDataStructures(tablePlayer, tableReviews,players,root ,"players_clean2.csv", "minirating.csv","tags.csv");
     string searchOption;
     string searchParam;
+    vector <string> searchTags;
     int top;
     while(true){
         cout << "Digite a pesquisa:\n";
@@ -39,6 +40,12 @@ int main()
                 topPositionSearch(players,top,searchParam);
             }
             
+        }else if(searchOption == "tags"){
+            getline(cin, searchParam);
+            searchTags=tagSeparator(searchParam);
+            for(int i=0;i<(int)searchTags.size();i++){
+                cout<< searchTags.at(i)<<"\n";
+            }
         }
         else{
             cout << "Opcao invalida" << "\n";
