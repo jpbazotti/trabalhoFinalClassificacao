@@ -10,7 +10,7 @@ int main()
     vector<list<Tag>> tableTags(20000);
     vector<Player> players;
     struct TrieNode *root = getNode();
-    loadDataStructures(tablePlayer, tableReviews, tableTags, players,root ,"players_clean2.csv", "rating.csv", "tags.csv");
+    loadDataStructures(tablePlayer, tableReviews,tableTags,players,root ,"players_clean2.csv", "rating.csv","tags.csv");
     string searchOption;
     string searchParam;
     vector <string> searchTags;
@@ -37,7 +37,6 @@ int main()
                 auto first = searchParam.find("'");
                 auto last = searchParam.find_first_of("'",first+1);
                 searchParam=searchParam.substr(first+1,last-first-1);
-                cout<< searchParam << "\n";
                 topPositionSearch(players,top,searchParam);
             }
             
@@ -45,15 +44,14 @@ int main()
             getline(cin, searchParam);
             searchTags=tagSeparator(searchParam);
             for(int i=0;i<(int)searchTags.size();i++){
-                cout<< searchTags.at(i)<<"\n";
+                cout<< i <<searchTags.at(i)<<"\n";
             }
+            tagSearch(tableTags,tablePlayer,searchTags);
         }
         else{
             cout << "Opcao invalida" << "\n";
         }
         cin.clear();
-        fflush(stdin);
-
     }
     return 0;
 }

@@ -133,7 +133,7 @@ int searchTrie(struct TrieNode *root, string key, vector<int> &list_id)
 void PrefixSearch(vector<list<Player>> tablePlayer, string prefix, struct TrieNode *root)
 {
     vector<int> list_id(0, 100000);
-    vector<int> fieldSizes = {9, 40, 18, 10, 10};
+    vector<int> fieldSizes = {9, 50, 18, 10, 10};
     vector<string> fields = {"sofifa_id", "name", "player_positions", "rating", "count"};
     searchTrie(root, prefix, list_id);
     printHeader(fields, fieldSizes);
@@ -169,7 +169,7 @@ void userSearch(vector<list<UserRating>> &tableReviews, vector<list<Player>> &ta
         advance(it, 1);
     }
     bSortUserRVector(userRatings);
-    vector<int> fieldSizes = {9, 40, 10, 10, 10};
+    vector<int> fieldSizes = {9, 50, 10, 10, 10};
     vector<string> fields = {"sofifa_id", "name", "rating", "count", "rating"};
     printHeader(fields, fieldSizes);
     for (int i = 0; i < (int)userRatings.size(); i++)
@@ -213,7 +213,7 @@ vector<string> positionSeparator(string positions)
 
 void topPositionSearch(vector<Player> players, int topx, string pos)
 {
-    vector<int> fieldSizes = {9, 40, 18, 10, 10};
+    vector<int> fieldSizes = {9, 50, 18, 10, 10};
     vector<string> fields = {"sofifa_id", "name", "player_positions", "rating", "count"};
     printHeader(fields, fieldSizes);
     int printed = 0;
@@ -277,6 +277,43 @@ vector<string> tagSeparator(string positions)
             aux = "";
         }
     }
-    v.push_back(aux);
     return (v);
+}
+
+void tagSearch(vector<list<Tag>> &tagTable,vector<list<Player>> &playerTable,vector<string>tags){
+    vector<int> finalList;
+    for(string tag:tags){
+        vector<int> v;
+        int hash=djb2Hash(tag)%(int)tagTable.size();
+        list<Tag>::iterator it = tagTable.at(hash).begin();
+        while (it != tagTable.at(hash).end())
+        {
+            if((*it).tag_string==tag){
+                v=(*it).sofifa_id;
+            }
+            advance(it, 1);
+        }
+        if(finalList.empty()){
+            finalList=v;
+        }
+        else{
+            finalList=intersection(finalList,v);
+        }
+    }
+    vector<int> fieldSizes = {9, 50, 18, 10, 10};
+    vector<string> fields = {"sofifa_id", "name", "player_positions", "rating", "count"};
+    printHeader(fields,fieldSizes);
+    for(int i=0;i<(int)finalList.size();i++){
+        int hash = finalList.at(i) % (int)playerTable.size();
+        list<Player>::iterator it = playerTable.at(hash).begin();
+        while (it != playerTable.at(hash).end())
+        {
+            if((*it).sofifa_id==finalList.at(i)){
+            vector<string> playerToString = {to_string((*it).sofifa_id), (*it).name, (*it).position, to_string((*it).reviewTotal / (*it).reviewCout), to_string((*it).reviewCout)};
+            printTable(playerToString,fieldSizes);
+            break;
+            }
+            advance(it, 1);
+        }
+    }
 }

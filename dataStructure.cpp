@@ -1,4 +1,16 @@
 #include "dataStructure.h"
+unsigned long djb2Hash(string str)
+{
+    unsigned long hash = 5381;
+    for (auto c : str)
+        hash = ((hash << 5) + hash + c);
+
+    return hash;
+}
+
+bool notEnoughReviews(Player player){
+    return player.reviewCout<1000;
+}
 
 bool playerReviewCount(vector<list<player>> &table, int player_id, float review)
 {
@@ -32,33 +44,36 @@ void printAllPlayers(vector<list<Player>> &table)
     }
 }
 
-void bSortPlayerVector(vector<Player> &players){
+void bSortPlayerVector(vector<Player> &players)
+{
     int size = (int)players.size();
-    for(int i =0;i<size;i++){
-        for(int j=0;j<(size -i -1);j++){
-            float c1=players.at(j).reviewCout!=0? (players.at(j).reviewTotal/players.at(j).reviewCout):0;
-            float c2=players.at(j+1).reviewCout!=0? (players.at(j+1).reviewTotal / players.at(j+1).reviewCout):0;
-            if(c1 < c2){
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < (size - i - 1); j++)
+        {
+            float c1 = players.at(j).reviewCout != 0 ? (players.at(j).reviewTotal / players.at(j).reviewCout) : 0;
+            float c2 = players.at(j + 1).reviewCout != 0 ? (players.at(j + 1).reviewTotal / players.at(j + 1).reviewCout) : 0;
+            if (c1 < c2)
+            {
                 Player temp = players.at(j);
-                players.at(j)=players.at(j+1);
-                players.at(j+1)=temp;
+                players.at(j) = players.at(j + 1);
+                players.at(j + 1) = temp;
             }
         }
     }
 }
 
-void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<list<Tag>> &tableTags, vector<Player> &players, struct TrieNode *root,string filenamePlayer, string filenameRatings, string filenameTags)
+void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<list<Tag>> &tableTags, vector<Player> &players, struct TrieNode *root, string filenamePlayer, string filenameRatings, string filenameTags)
 {
     ifstream f(filenamePlayer);
     CsvParser parser(f);
-    
+
     ifstream f2(filenameRatings);
     CsvParser parser2(f2);
-    ifstream f3(filenameTags);
-    CsvParser parser3(f3);
 
     ifstream f3(filenameTags);
     CsvParser parser3(f3);
+
     for (auto &row : parser)
     {
         try
@@ -99,11 +114,29 @@ void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRatin
         try
         {
             Tag tags;
-            tags.sofifa_id = stoi(row3.at(1));
+            tags.sofifa_id = {stoi(row3.at(1))};
             tags.tag_string = row3.at(2);
             int hash = djb2Hash(tags.tag_string) % (int)tableTags.size();
-            tableTags.at(hash).push_back(tags);
+            bool found = false;
+            list<Tag>::iterator it = tableTags.at(hash).begin();
+            while (it != tableTags.at(hash).end())
+            {
+                if ((*it).tag_string == tags.tag_string)
+                {
+                    found = true;
+                    if (find((*it).sofifa_id.begin(), (*it).sofifa_id.end(), tags.sofifa_id.at(0)) == (*it).sofifa_id.end())
+                    {
+                        (*it).sofifa_id.push_back(tags.sofifa_id.at(0));
+                    }
+                }
+                advance(it, 1);
+            }
+            if (!found)
+            {
+                tableTags.at(hash).push_back(tags);
+            }
         }
+
         catch (invalid_argument const &)
         {
             //cout << "pula primeira linha 2";
@@ -118,13 +151,12 @@ void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRatin
             advance(it, 1);
         }
     }
-    for (int i=0;i<(int)players.size();i++)
+    for (int i = 0; i < (int)players.size(); i++)
     {
         insert(root, players.at(i).name, players.at(i).sofifa_id);
-        if(players.at(i).reviewCout < 1000){
-        players.erase(players.begin()+i);
-        }
     }
+    vector<Player>::iterator newIter = remove_if(players.begin(),players.end(),notEnoughReviews);
+    players.resize(newIter -  players.begin());
     bSortPlayerVector(players);
 }
 
@@ -139,7 +171,6 @@ struct TrieNode *getNode(void)
 
     return pNode;
 }
-
 
 // If not present, inserts key into trie
 // If the key is prefix of trie node, just
@@ -174,27 +205,20 @@ void insert(struct TrieNode *root, string key, int sofifa_id)
     pCrawl->sofifa_id = sofifa_id;
 }
 
-void bSortUserRVector(vector<UserRating> &ratings){
+void bSortUserRVector(vector<UserRating> &ratings)
+{
 
     int size = (int)ratings.size();
-    for(int i =0;i<size;i++){
-        for(int j=0;j<(size -i -1);j++){
-            if(ratings.at(j).rating < ratings.at(j+1).rating){
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < (size - i - 1); j++)
+        {
+            if (ratings.at(j).rating < ratings.at(j + 1).rating)
+            {
                 UserRating temp = ratings.at(j);
-                ratings.at(j)=ratings.at(j+1);
-                ratings.at(j+1)=temp;
+                ratings.at(j) = ratings.at(j + 1);
+                ratings.at(j + 1) = temp;
             }
         }
     }
 }
-
-unsigned long djb2Hash(string str)
-{
-    unsigned long hash = 5381;
-    for (auto c : str)
-        hash = ((hash << 5) + hash + c);
-
-    return hash;
-}
-
-

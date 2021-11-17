@@ -31,7 +31,7 @@ struct player{
 typedef struct tag Tag;
 struct tag{
   string tag_string;
-  int sofifa_id;
+  vector<int> sofifa_id;
 };
 
 struct TrieNode
@@ -41,6 +41,9 @@ struct TrieNode
     // o fim do nome e o id sofifa do jogador
     int sofifa_id;
 };
+
+//Hash para strings
+unsigned long djb2Hash(string str);
 //Atualiza a quantidade de reviews do jogador e o total de notas;
 bool playerReviewCount(vector<list<Player>> &table,int player_id,float review);
 //Imprime todos os jogadores da hash table;

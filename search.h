@@ -25,5 +25,6 @@ vector<string> positionSeparator(string positions);
 void topPositionSearch(vector<Player> players,int topx,string pos);
 //Recebe uma string, separa em um array usando '' como delimitador
 vector<string> tagSeparator(string positions);
-
+//Retorna o resultado da pesquisa atraves de tags
+void tagSearch(vector<list<Tag>> &tagTable,vector<list<Player>> &playerTable,vector<string>tags);
 #endif
