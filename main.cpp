@@ -43,9 +43,6 @@ int main()
         }else if(searchOption == "tags"){
             getline(cin, searchParam);
             searchTags=tagSeparator(searchParam);
-            for(int i=0;i<(int)searchTags.size();i++){
-                cout<< i <<searchTags.at(i)<<"\n";
-            }
             tagSearch(tableTags,tablePlayer,searchTags);
         }
         else{
