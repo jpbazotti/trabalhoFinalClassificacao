@@ -32,6 +32,21 @@ void printAllPlayers(vector<list<Player>> &table)
     }
 }
 
+void bSortPlayerVector(vector<Player> &players){
+    int size = (int)players.size();
+    for(int i =0;i<size;i++){
+        for(int j=0;j<(size -i -1);j++){
+            float c1=players.at(j).reviewCout!=0? (players.at(j).reviewTotal/players.at(j).reviewCout):0;
+            float c2=players.at(j+1).reviewCout!=0? (players.at(j+1).reviewTotal / players.at(j+1).reviewCout):0;
+            if(c1 < c2){
+                Player temp = players.at(j);
+                players.at(j)=players.at(j+1);
+                players.at(j+1)=temp;
+            }
+        }
+    }
+}
+
 void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<Player> &players, struct TrieNode *root,string filenamePlayer, string filenameRatings)
 {
     ifstream f(filenamePlayer);
@@ -83,13 +98,16 @@ void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRatin
             advance(it, 1);
         }
     }
-    for (Player player : players)
+    for (int i=0;i<(int)players.size();i++)
     {
-        insert(root, player.name, player.sofifa_id);
+        insert(root, players.at(i).name, players.at(i).sofifa_id);
+        if(players.at(i).reviewCout < 1000){
+        players.erase(players.begin()+i);
+        }
     }
+    bSortPlayerVector(players);
 }
 
-// Returns new trie node (initialized to NULLs)
 struct TrieNode *getNode(void)
 {
     struct TrieNode *pNode = new TrieNode;
@@ -149,3 +167,5 @@ void bSortUserRVector(vector<UserRating> &ratings){
         }
     }
 }
+
+

@@ -180,3 +180,33 @@ void userSearch(vector<list<UserRating>> &tableReviews, vector<list<Player>> &ta
         printTable(playerToString,fieldSizes);
     }
 }
+
+vector<string> positionSeparator(string positions){
+      positions.erase(remove(positions.begin(), positions.end(), ','), positions.end());
+      vector<string> v;
+      string aux="";
+      for(int i;i < (int)positions.length();i++){
+          if(positions.at(i)==' '){
+              v.push_back(aux);
+              aux="";
+          }else{
+              aux+=positions.at(i);
+          }
+      }
+      v.push_back(aux);
+      return(v);
+}
+
+void topPositionSearch(vector<Player> players,int topx,string pos){
+    vector<int> fieldSizes={9,40,18,10,10};
+    vector<string> fields={"sofifa_id","name","player_positions","rating","count"};
+    printHeader(fields,fieldSizes);
+    int printed=0;
+    for(int i = 0;(i<(int)players.size())&&(printed<topx);i++){
+        if(players.at(i).position.find(pos)!= string::npos){
+            vector<string> playerToString={to_string(players.at(i).sofifa_id),players.at(i).name,players.at(i).position,to_string(players.at(i).reviewTotal/players.at(i).reviewCout),to_string(players.at(i).reviewCout)};
+            printTable(playerToString,fieldSizes);
+            printed++;
+        }
+    }
+}

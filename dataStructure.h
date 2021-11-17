@@ -2,8 +2,10 @@
 #define dataStruture_h
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <list>
 #include <vector>
+#include <algorithm>
 #include "parser.hpp"
 using namespace aria::csv;
 using namespace std;
@@ -33,12 +35,19 @@ struct TrieNode
     // o fim do nome e o id sofifa do jogador
     int sofifa_id;
 };
-
+//Atualiza a quantidade de reviews do jogador e o total de notas;
 bool playerReviewCount(vector<list<Player>> &table,int player_id,float review);
+//Imprime todos os jogadores da hash table;
 void printAllPlayers(vector<list<Player>> &table);
+//Faz bubble sort no vetor de players
+void bSortPlayerVector(vector<Player> &players);
+//Carrega todas as estruturas para memoria
 void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<Player> &players,struct TrieNode *root, string filenamePlayer, string filenameRatings);
+//Retorna um novo nodo da Trie com filhos inicializados para null
 struct TrieNode *getNode(void);
+//Insere um nome na trie
 void insert(struct TrieNode *root, string key, int sofifa_id);
+//Faz bubble sort no vetor de user ratings
 void bSortUserRVector(vector<UserRating> &ratings);
 
 #endif
