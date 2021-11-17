@@ -47,13 +47,16 @@ void bSortPlayerVector(vector<Player> &players){
     }
 }
 
-void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<Player> &players, struct TrieNode *root,string filenamePlayer, string filenameRatings)
+void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<Player> &players, struct TrieNode *root,string filenamePlayer, string filenameRatings,string filenameTags)
 {
     ifstream f(filenamePlayer);
     CsvParser parser(f);
+    
     ifstream f2(filenameRatings);
     CsvParser parser2(f2);
 
+    ifstream f3(filenameTags);
+    CsvParser parser3(f3);
     for (auto &row : parser)
     {
         try

@@ -9,7 +9,7 @@ int main()
     vector<list<UserRating>> tableReviews(30000);
     vector<Player> players;
     struct TrieNode *root = getNode();
-    loadDataStructures(tablePlayer, tableReviews,players,root ,"players_clean2.csv", "rating.csv");
+    loadDataStructures(tablePlayer, tableReviews,players,root ,"players_clean2.csv", "rating.csv","tags.csv");
     string searchOption;
     string searchParam;
     int top;
