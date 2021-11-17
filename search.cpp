@@ -1,9 +1,10 @@
 #include "search.h"
 void printHeader(vector<string> fields, vector<int> fieldSizes)
 {
-    int size=0;
-    for(int i = 0; i < (int)fieldSizes.size(); i++){
-        size+=(int)(fieldSizes.at(i)) + 1;
+    int size = 0;
+    for (int i = 0; i < (int)fieldSizes.size(); i++)
+    {
+        size += (int)(fieldSizes.at(i)) + 1;
     }
     size++;
     for (int i = 0; i < size; i++)
@@ -24,14 +25,16 @@ void printHeader(vector<string> fields, vector<int> fieldSizes)
     {
         cout << "-";
     }
-    cout<<"\n";
+    cout << "\n";
 }
+
 void printTable(vector<string> fields, vector<int> fieldSizes)
 {
-    
-    int size=0;
-    for(int i = 0; i < (int)fieldSizes.size(); i++){
-        size+=(int)(fieldSizes.at(i)) + 1;
+
+    int size = 0;
+    for (int i = 0; i < (int)fieldSizes.size(); i++)
+    {
+        size += (int)(fieldSizes.at(i)) + 1;
     }
     size++;
     cout << "|";
@@ -42,12 +45,14 @@ void printTable(vector<string> fields, vector<int> fieldSizes)
         {
             cout << " ";
         }
-        if(fields.at(i)=="nan"){
-        cout << "  0" << "|";
-
+        if (fields.at(i) == "nan")
+        {
+            cout << "  0"
+                 << "|";
         }
-        else{
-        cout << fields.at(i) << "|";
+        else
+        {
+            cout << fields.at(i) << "|";
         }
     }
     cout << "\n";
@@ -55,8 +60,9 @@ void printTable(vector<string> fields, vector<int> fieldSizes)
     {
         cout << "-";
     }
-    cout<<"\n";
+    cout << "\n";
 }
+
 void print_nodes(struct TrieNode *node, string substring, vector<int> &list_id)
 {
     int i;
@@ -92,6 +98,7 @@ void print_nodes(struct TrieNode *node, string substring, vector<int> &list_id)
     }
     return;
 }
+
 int searchTrie(struct TrieNode *root, string key, vector<int> &list_id)
 {
     struct TrieNode *pCrawl = root;
@@ -122,13 +129,14 @@ int searchTrie(struct TrieNode *root, string key, vector<int> &list_id)
 
     return 0;
 }
+
 void PrefixSearch(vector<list<Player>> tablePlayer, string prefix, struct TrieNode *root)
 {
     vector<int> list_id(0, 100000);
-    vector<int> fieldSizes={9,40,18,10,10};
-    vector<string> fields={"sofifa_id","name","player_positions","rating","count"};
+    vector<int> fieldSizes = {9, 40, 18, 10, 10};
+    vector<string> fields = {"sofifa_id", "name", "player_positions", "rating", "count"};
     searchTrie(root, prefix, list_id);
-    printHeader(fields,fieldSizes);
+    printHeader(fields, fieldSizes);
     for (int i = 0; i < (int)list_id.size(); i++)
     {
         int hash = list_id.at(i) % tablePlayer.size();
@@ -137,14 +145,15 @@ void PrefixSearch(vector<list<Player>> tablePlayer, string prefix, struct TrieNo
         {
             if ((*it).sofifa_id == list_id.at(i))
             {
-                vector<string> playerToString={to_string((*it).sofifa_id),(*it).name,(*it).position,to_string((*it).reviewTotal/(*it).reviewCout),to_string((*it).reviewCout)};
-                printTable(playerToString,fieldSizes);
+                vector<string> playerToString = {to_string((*it).sofifa_id), (*it).name, (*it).position, to_string((*it).reviewTotal / (*it).reviewCout), to_string((*it).reviewCout)};
+                printTable(playerToString, fieldSizes);
                 break;
             }
             advance(it, 1);
         }
     }
 }
+
 void userSearch(vector<list<UserRating>> &tableReviews, vector<list<Player>> &tablePlayer, int userID)
 {
     vector<UserRating> userRatings;
@@ -160,9 +169,9 @@ void userSearch(vector<list<UserRating>> &tableReviews, vector<list<Player>> &ta
         advance(it, 1);
     }
     bSortUserRVector(userRatings);
-    vector<int> fieldSizes={9,40,10,10,10};
-    vector<string> fields={"sofifa_id","name","rating","count","rating"};
-    printHeader(fields,fieldSizes);
+    vector<int> fieldSizes = {9, 40, 10, 10, 10};
+    vector<string> fields = {"sofifa_id", "name", "rating", "count", "rating"};
+    printHeader(fields, fieldSizes);
     for (int i = 0; i < (int)userRatings.size(); i++)
     {
         player p;
@@ -176,58 +185,98 @@ void userSearch(vector<list<UserRating>> &tableReviews, vector<list<Player>> &ta
             }
             advance(it2, 1);
         }
-        vector<string> playerToString={to_string(p.sofifa_id),p.name,to_string(p.reviewTotal/p.reviewCout),to_string(p.reviewCout), to_string(userRatings.at(i).rating)};
-        printTable(playerToString,fieldSizes);
+        vector<string> playerToString = {to_string(p.sofifa_id), p.name, to_string(p.reviewTotal / p.reviewCout), to_string(p.reviewCout), to_string(userRatings.at(i).rating)};
+        printTable(playerToString, fieldSizes);
     }
 }
 
-vector<string> positionSeparator(string positions){
-      positions.erase(remove(positions.begin(), positions.end(), ','), positions.end());
-      vector<string> v;
-      string aux="";
-      for(int i;i < (int)positions.length();i++){
-          if(positions.at(i)==' '){
-              v.push_back(aux);
-              aux="";
-          }else{
-              aux+=positions.at(i);
-          }
-      }
-      v.push_back(aux);
-      return(v);
+vector<string> positionSeparator(string positions)
+{
+    positions.erase(remove(positions.begin(), positions.end(), ','), positions.end());
+    vector<string> v;
+    string aux = "";
+    for (int i=0; i < (int)positions.length(); i++)
+    {
+        if (positions.at(i) == ' ')
+        {
+            v.push_back(aux);
+            aux = "";
+        }
+        else
+        {
+            aux += positions.at(i);
+        }
+    }
+    v.push_back(aux);
+    return (v);
 }
 
-void topPositionSearch(vector<Player> players,int topx,string pos){
-    vector<int> fieldSizes={9,40,18,10,10};
-    vector<string> fields={"sofifa_id","name","player_positions","rating","count"};
-    printHeader(fields,fieldSizes);
-    int printed=0;
-    for(int i = 0;(i<(int)players.size())&&(printed<topx);i++){
-        if(players.at(i).position.find(pos)!= string::npos){
-            vector<string> playerToString={to_string(players.at(i).sofifa_id),players.at(i).name,players.at(i).position,to_string(players.at(i).reviewTotal/players.at(i).reviewCout),to_string(players.at(i).reviewCout)};
-            printTable(playerToString,fieldSizes);
+void topPositionSearch(vector<Player> players, int topx, string pos)
+{
+    vector<int> fieldSizes = {9, 40, 18, 10, 10};
+    vector<string> fields = {"sofifa_id", "name", "player_positions", "rating", "count"};
+    printHeader(fields, fieldSizes);
+    int printed = 0;
+    for (int i = 0; (i < (int)players.size()) && (printed < topx); i++)
+    {
+        if (players.at(i).position.find(pos) != string::npos)
+        {
+            vector<string> playerToString = {to_string(players.at(i).sofifa_id), players.at(i).name, players.at(i).position, to_string(players.at(i).reviewTotal / players.at(i).reviewCout), to_string(players.at(i).reviewCout)};
+            printTable(playerToString, fieldSizes);
             printed++;
         }
     }
 }
-void bsort(vector<int> &n){
+
+void bsort(vector<int> &n)
+{
 
     int size = (int)n.size();
-    for(int i =0;i<size;i++){
-        for(int j=0;j<(size -i -1);j++){
-            if(n.at(j) > n.at(j+1)){
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < (size - i - 1); j++)
+        {
+            if (n.at(j) > n.at(j + 1))
+            {
                 int temp = n.at(j);
-                n.at(j)=n.at(j+1);
-                n.at(j+1)=temp;
+                n.at(j) = n.at(j + 1);
+                n.at(j + 1) = temp;
             }
         }
     }
 }
 
-vector<int> intersection(vector<int> &v1,vector<int> &v2){
+vector<int> intersection(vector<int> &v1, vector<int> &v2)
+{
     vector<int> v3;
     bsort(v1);
     bsort(v2);
-    set_intersection(v1.begin(),v1.end(),v2.begin(),v2.end(),back_inserter(v3));
+    set_intersection(v1.begin(), v1.end(), v2.begin(), v2.end(), back_inserter(v3));
     return v3;
+}
+
+vector<string> tagSeparator(string positions)
+{
+    vector<string> v;
+    string aux = "";
+    int delimCount = 0;
+    for (int i=0; i < (int)positions.length(); i++)
+    {
+        if (positions.at(i) == '\'' && delimCount == 0)
+        {
+            delimCount = 1;
+        }
+        else if (positions.at(i) != '\'' && delimCount == 1)
+        {
+            aux += positions.at(i);
+        }
+        else if ((positions.at(i) == '\'' && delimCount == 1))
+        {
+            v.push_back(aux);
+            delimCount = 0;
+            aux = "";
+        }
+    }
+    v.push_back(aux);
+    return (v);
 }

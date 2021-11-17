@@ -23,4 +23,7 @@ void userSearch(vector<list<UserRating>> &tableReviews,vector<list<player>> &tab
 vector<string> positionSeparator(string positions);
 //Retorna o resultado da pesquisa atraves de posicao do jogador 
 void topPositionSearch(vector<Player> players,int topx,string pos);
+//Recebe uma string, separa em um array usando '' como delimitador
+vector<string> tagSeparator(string positions);
+
 #endif

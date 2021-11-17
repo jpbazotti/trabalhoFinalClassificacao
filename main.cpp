@@ -13,6 +13,7 @@ int main()
     loadDataStructures(tablePlayer, tableReviews, tableTags, players,root ,"players_clean2.csv", "rating.csv", "tags.csv");
     string searchOption;
     string searchParam;
+    vector <string> searchTags;
     int top;
     while(true){
         cout << "Digite a pesquisa:\n";
@@ -38,7 +39,14 @@ int main()
                 searchParam=searchParam.substr(first+1,last-first-1);
                 cout<< searchParam << "\n";
                 topPositionSearch(players,top,searchParam);
-            }            
+            }
+            
+        }else if(searchOption == "tags"){
+            getline(cin, searchParam);
+            searchTags=tagSeparator(searchParam);
+            for(int i=0;i<(int)searchTags.size();i++){
+                cout<< searchTags.at(i)<<"\n";
+            }
         }
         else{
             cout << "Opcao invalida" << "\n";

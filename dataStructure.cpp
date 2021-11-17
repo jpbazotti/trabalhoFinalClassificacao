@@ -51,11 +51,14 @@ void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRatin
 {
     ifstream f(filenamePlayer);
     CsvParser parser(f);
+    
     ifstream f2(filenameRatings);
     CsvParser parser2(f2);
     ifstream f3(filenameTags);
     CsvParser parser3(f3);
 
+    ifstream f3(filenameTags);
+    CsvParser parser3(f3);
     for (auto &row : parser)
     {
         try
