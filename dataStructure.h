@@ -28,6 +28,12 @@ struct player{
   float reviewTotal;
 };
 
+typedef struct tag Tag;
+struct tag{
+  string tag_string;
+  int sofifa_id;
+};
+
 struct TrieNode
 {
     struct TrieNode *children[ALPHABET_SIZE];
@@ -42,7 +48,7 @@ void printAllPlayers(vector<list<Player>> &table);
 //Faz bubble sort no vetor de players
 void bSortPlayerVector(vector<Player> &players);
 //Carrega todas as estruturas para memoria
-void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<Player> &players,struct TrieNode *root, string filenamePlayer, string filenameRatings);
+void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<list<Tag>> &tableTags, vector<Player> &players, struct TrieNode *root,string filenamePlayer, string filenameRatings, string filenameTags);
 //Retorna um novo nodo da Trie com filhos inicializados para null
 struct TrieNode *getNode(void);
 //Insere um nome na trie

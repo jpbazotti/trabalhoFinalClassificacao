@@ -7,9 +7,10 @@ int main()
 {
     vector<list<Player>> tablePlayer(5000);
     vector<list<UserRating>> tableReviews(30000);
+    vector<list<Tag>> tableTags(20000);
     vector<Player> players;
     struct TrieNode *root = getNode();
-    loadDataStructures(tablePlayer, tableReviews,players,root ,"players_clean2.csv", "rating.csv");
+    loadDataStructures(tablePlayer, tableReviews, tableTags, players,root ,"players_clean2.csv", "rating.csv", "tags.csv");
     string searchOption;
     string searchParam;
     int top;
@@ -37,8 +38,7 @@ int main()
                 searchParam=searchParam.substr(first+1,last-first-1);
                 cout<< searchParam << "\n";
                 topPositionSearch(players,top,searchParam);
-            }
-            
+            }            
         }
         else{
             cout << "Opcao invalida" << "\n";

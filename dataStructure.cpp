@@ -47,12 +47,14 @@ void bSortPlayerVector(vector<Player> &players){
     }
 }
 
-void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<Player> &players, struct TrieNode *root,string filenamePlayer, string filenameRatings)
+void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRating>> &tableReviews, vector<list<Tag>> &tableTags, vector<Player> &players, struct TrieNode *root,string filenamePlayer, string filenameRatings, string filenameTags)
 {
     ifstream f(filenamePlayer);
     CsvParser parser(f);
     ifstream f2(filenameRatings);
     CsvParser parser2(f2);
+    ifstream f3(filenameTags);
+    CsvParser parser3(f3);
 
     for (auto &row : parser)
     {
@@ -83,6 +85,21 @@ void loadDataStructures(vector<list<Player>> &tablePlayer, vector<list<UserRatin
             int hash = rating.user_id % tableReviews.size();
             tableReviews.at(hash).push_back(rating);
             playerReviewCount(tablePlayer, rating.sofifa_id, rating.rating);
+        }
+        catch (invalid_argument const &)
+        {
+            //cout << "pula primeira linha 2";
+        }
+    }
+    for (auto &row3 : parser3)
+    {
+        try
+        {
+            Tag tags;
+            tags.sofifa_id = stoi(row3.at(1));
+            tags.tag_string = row3.at(2);
+            int hash = djb2Hash(tags.tag_string) % (int)tableTags.size();
+            tableTags.at(hash).push_back(tags);
         }
         catch (invalid_argument const &)
         {
@@ -166,6 +183,15 @@ void bSortUserRVector(vector<UserRating> &ratings){
             }
         }
     }
+}
+
+unsigned long djb2Hash(string str)
+{
+    unsigned long hash = 5381;
+    for (auto c : str)
+        hash = ((hash << 5) + hash + c);
+
+    return hash;
 }
 
 
