@@ -210,3 +210,24 @@ void topPositionSearch(vector<Player> players,int topx,string pos){
         }
     }
 }
+void bsort(vector<int> &n){
+
+    int size = (int)n.size();
+    for(int i =0;i<size;i++){
+        for(int j=0;j<(size -i -1);j++){
+            if(n.at(j) > n.at(j+1)){
+                int temp = n.at(j);
+                n.at(j)=n.at(j+1);
+                n.at(j+1)=temp;
+            }
+        }
+    }
+}
+
+vector<int> intersection(vector<int> &v1,vector<int> &v2){
+    vector<int> v3;
+    bsort(v1);
+    bsort(v2);
+    set_intersection(v1.begin(),v1.end(),v2.begin(),v2.end(),back_inserter(v3));
+    return v3;
+}
