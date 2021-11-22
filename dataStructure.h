@@ -44,6 +44,8 @@ struct TrieNode
 
 //Hash para strings
 unsigned long djb2Hash(string str);
+//Retorna check de player com menos de 1000 avaliacoes
+bool notEnoughReviews(Player player);
 //Atualiza a quantidade de reviews do jogador e o total de notas;
 bool playerReviewCount(vector<list<Player>> &table,int player_id,float review);
 //Imprime todos os jogadores da hash table;

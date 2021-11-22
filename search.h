@@ -23,6 +23,10 @@ void userSearch(vector<list<UserRating>> &tableReviews,vector<list<player>> &tab
 vector<string> positionSeparator(string positions);
 //Retorna o resultado da pesquisa atraves de posicao do jogador 
 void topPositionSearch(vector<Player> players,int topx,string pos);
+//Faz bubblesort com vector de inteiros
+void bsort(vector<int> &n);
+//Retorna intersecao entre does vetores de inteiros
+vector<int> intersection(vector<int> &v1, vector<int> &v2);
 //Recebe uma string, separa em um array usando '' como delimitador
 vector<string> tagSeparator(string positions);
 //Retorna o resultado da pesquisa atraves de tags
